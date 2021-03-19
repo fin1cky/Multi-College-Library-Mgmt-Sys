@@ -18,8 +18,9 @@
             1. to create a new virtual environment for the project , run `python -m venv DBMS`, here *DBMS* is your environment name, and you can set it to whatever you want
             2. to activate the virtual environment run `DBMS\Scripts\activate` -> do this in your command line and not in your integrated terminal on vscode
             3. If you do wish to run it on vscode's terminal do, `$ . DBMS\Scripts\activate.ps1`
-            4. once the environment has been activated you should be able to see something like this -> `(DBMS) ~_path_to_project_directory_$ python -m pip install --upgrade pip`
-            5. inside your environment run ` pip install -r requirements.txt` (NOTE : incase your command line freezes then run `python -m pip install -r requirements.txt`), this should install django in your environment
+            4. once the environment has been activated you should be able to see something like this -> `(DBMS) ~_path_to_project_directory_$ ...`
+            5. update your pip by running - `python -m pip install --upgrade pip` inside your environment
+            6. inside your environment run ` pip install -r requirements.txt` (NOTE : incase your command line freezes then run `python -m pip install -r requirements.txt`), this should install django in your environment
 
 
 ## What next ? read the following
