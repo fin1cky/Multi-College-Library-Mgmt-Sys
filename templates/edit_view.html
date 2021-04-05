@@ -1,0 +1,51 @@
+{% load widget_tweaks %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        #body{
+            background-size: 100%;
+        }
+    .button1{
+             margin-top: 0px;
+            margin-left: 10px;
+            background-color: darkturquoise;
+            font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+            color: black;
+            transition-duration: 0.4s;
+            border: 2px solid darkturquoise;
+        border-radius: 12px;
+        padding: 14px 300px;
+        }
+        .button2{
+            position: absolute;
+            top: 8px;
+            left: 800px;
+
+            background-color: transparent;
+            font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+            color: darkturquoise;
+            transition-duration: 0.4s;
+            border: 2px solid darkturquoise;
+        border-radius: 12px;
+        padding: 14px 300px;
+        }
+    .button1:hover{
+        background-color: transparent;
+        color: darkturquoise;
+    }
+    </style>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="body" style="background-image: url('{% static "images/F.jpg"%}')">
+<button class="button1">YOUR PROFILE</button>
+<button class="button2">EDIT YOUR PROFILE</button>
+<form action="/accounts/edit_profile/" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>
