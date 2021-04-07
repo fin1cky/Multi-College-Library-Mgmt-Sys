@@ -1,13 +1,16 @@
+from datetime import timedelta
+
 from django.contrib.auth import login, logout,authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.utils import timezone
 from django.views.generic import CreateView
 from django.forms import ValidationError
-from library.models import College,Books
+from library.models import College, Books, Inventory
 from .form import Student_Form, update_profile
 from django.contrib.auth.forms import AuthenticationForm
-from accounts.models import User, Student,issue
+from accounts.models import User, Student, issue, Request
 from django.forms import forms
 
 def register(request):
@@ -61,7 +64,9 @@ def login_request(request):
 @login_required
 def student_homeView(request):
     user = request.user
+    issue.objects.filter(user=user,Return_date__lt=timezone.now().date()).delete()
     books1 = issue.objects.filter(user=user)
+
     l = books1.values_list('book_id',flat=True)
     books = Books.objects.filter(Book_id__in=l)
     context = {
@@ -134,9 +139,71 @@ def return_book_page(request):
     }
     if(request.POST):
         book_id = request.POST.get('optradio')
-        book = Books.objects.get(Book_id=book_id)
-        issue.objects.get(user=request.user,book=book).delete()
+        if(book_id!=None):
+            book = Books.objects.get(Book_id=book_id)
+            issue.objects.get(user=request.user,book=book).delete()
         return redirect('/accounts/student_home')
     return render(request,'../templates/return_book.html',context)
 def add_book(request):
-    return redirect('/accounts/add_book_page');
+    return redirect('/accou'
+                    'nts/add_book_page');
+def add_book_page(request):
+    user = request.user
+    user1 = User.objects.get(username=user.username)
+    student = Student.objects.get(user=user)
+    college = student.College
+    college_invt = Inventory.objects.filter(College=college,Book_count__gt=0).values_list('Books_id',flat=True)
+    student_books = issue.objects.filter(user=user).values_list('book_id',flat=True)
+    books_id = [i for i in college_invt if i not in student_books]
+    books = Books.objects.filter(Book_id__in = books_id)
+
+
+
+    context = {
+        'books':books
+    }
+    if(request.POST):
+        book_id = request.POST.get('optradio')
+        book = Books.objects.get(Book_id=book_id)
+        issue_date = timezone.now().date()
+        if(student.membership == 'G'):
+            return_date = issue_date + timedelta(days=30)
+        elif(student.membership == 'S'):
+            return_date = issue_date + timedelta(days=20)
+        else:
+            return_date = issue_date + timedelta(days=10)
+
+        i = issue(user=user,book=book,Issue_date=issue_date,Return_date=return_date)
+        i.save()
+        intv = Inventory.objects.get(College=college,Books_id=book_id)
+        intv.Book_count = intv.Book_count - 1
+        intv.save()
+        return redirect('/accounts/student_home')
+    return render(request,'../templates/add_book.html',context)
+def membership(request):
+    return redirect('/accounts/membership_page')
+def membership_page(request):
+    return render(request,'../templates/membership.html')
+def request_book(request):
+    return redirect('/accounts/request_book_page')
+def request_book_page(request):
+    user = request.user
+    student = Student.objects.get(user=user)
+    college = student.College
+    all_books = Books.objects.all().values_list('Book_id',flat=True)
+    student_books = issue.objects.filter(user=user).values_list('book_id', flat=True)
+    college_books = Inventory.objects.filter(College=college,Book_count__gt=0).values_list('Books_id',flat=True)
+    exclude_books = list(set(student_books) | set(college_books))
+    books_id = [i for i in all_books if i not in exclude_books]
+    books = Books.objects.filter(Book_id__in=books_id)
+    context = {
+        'books':books
+    }
+    if(request.POST):
+        book_id = request.POST.get('optradio')
+        if(book_id!=None):
+            Book = Books.objects.get(Book_id=book_id)
+            i = Request(User=user,Book=Book)
+            i.save()
+        return redirect('/accounts/student_home')
+    return render(request,'../templates/request_book.html',context)

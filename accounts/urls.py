@@ -17,5 +17,11 @@ urlpatterns=[
      path('edit',views.edit,name='edit'),
      path('edit_profile/',views.edit_view,name='edit_profile'),
      path('return_book',views.return_book,name='return_book'),
-     path('return_book_page/',views.return_book_page,name='return_book_page')
+     path('return_book_page/',views.return_book_page,name='return_book_page'),
+     path('add_book',views.add_book,name='add_book'),
+     path('add_book_page/',views.add_book_page,name='add_book_page'),
+     path('membership',views.membership,name='membership'),
+     path('membership_page/',views.membership_page,name='membership_page'),
+     path('request_book',views.request_book,name='request_book'),
+     path('request_book_page/',views.request_book_page,name='request_book_page')
      ]

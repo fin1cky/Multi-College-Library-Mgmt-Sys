@@ -54,11 +54,12 @@ class Student_Form(UserCreationForm):
         }
         user = super().save(commit=False)
         mem = self.cleaned_data.get('membership')
-        user.membership = mem
-        user.wallet_points = Wallet.get(mem)
+
         user.is_student = True
         user.save()
         student = Student.objects.create(user=user)
+        student.membership = mem
+        student.wallet_points = Wallet.get(mem)
         student.first_name = self.cleaned_data.get('first_name')
         student.last_name = self.cleaned_data.get('last_name')
         student.student_id = self.cleaned_data.get('student_id')
