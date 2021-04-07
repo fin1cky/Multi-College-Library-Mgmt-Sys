@@ -148,16 +148,16 @@
     <p>AGE: {{ student.age }}</p>
 </div>
 <div class="membership">
-    {% if user.membership == 'G' %}
+    {% if student.membership == 'G' %}
         <p>MEMBERSHIP: Gold</p>
-    {% elif user.membership == 'S' %}
+    {% elif student.membership == 'S' %}
         <p>MEMBERSHIP: Silver</p>
     {% else %}
     <p>MEMBERSHIP: Bronze</p>
     {% endif %}
 </div>
 <div class="wallet">
-    <p>WALLET POINTS: {{ user.wallet_points }}</p>
+    <p>WALLET POINTS: {{ student.wallet_points }}</p>
 </div>
 <div class="college">
     <p>COLLEGE: {{ student.College.College_name }}</p>
