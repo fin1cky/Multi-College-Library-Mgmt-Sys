@@ -22,3 +22,7 @@ class Inventory(models.Model):
     College = models.ForeignKey(College,on_delete=models.CASCADE)
     Books = models.ForeignKey(Books,on_delete=models.CASCADE)
     Book_count = models.IntegerField(default=0)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['College','Books'],name='College_book_cons')
+        ]

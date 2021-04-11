@@ -37,7 +37,7 @@ class issue(models.Model):
     book = models.ForeignKey(Books,on_delete=models.CASCADE,null=True)
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user','book'],name='book_student_cons')
+            models.UniqueConstraint(fields=['user','book'], name='book_student_cons')
         ]
     Issue_date = models.DateField(default=timezone.now)
     # Create your models here.
@@ -45,3 +45,31 @@ class issue(models.Model):
 class Request(models.Model):
     User = models.ForeignKey(User,on_delete=models.CASCADE)
     Book = models.ForeignKey(Books,on_delete=models.CASCADE)
+class Admin(models.Model):
+    # admin class extends user class
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    # admin id - assigned by the system, thereby unique
+    admin_id = models.CharField(primary_key=True, max_length=255)
+
+    # name
+    first_name = models.CharField(max_length=255,null=True)
+    last_name  = models.CharField(max_length=255,null=True)
+    # age
+    age = models.IntegerField(null=True)
+    # email id
+    email = models.EmailField(max_length=255,null=True)
+    phone_no = models.IntegerField(null=True)
+    #gender
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+    )
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+
+    # address details of admin
+    pincode = models.IntegerField(null=True)
+    city = models.CharField(max_length=255,null=True)
+    state = models.CharField(max_length=255,null=True)
+
+    # admin has a 1-1 total relationship with class 'College'
+    college = models.OneToOneField(College,on_delete= models.CASCADE)
